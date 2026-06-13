@@ -104,3 +104,8 @@ git checkout -b feature/database-and-auth
 
 # ۲. ساخت فایل گزارش کار به صورت یک فایل Markdown تمیز
 New-Item -ItemType File -Name "DEV_LOG.md"
+## 👤 سیستم کاربران (Custom User Model)
+- ارث‌بری از `AbstractUser` برای انعطاف‌پذیری در آینده.
+- اضافه شدن فیلدهای `phone_number` و `is_customer`.
+- رجیستر کردن مدل در `admin.py`.
+- اجرای موفقیت‌آمیز اولین `makemigrations` و `migrate` روی PostgreSQL.
