@@ -1,0 +1,17 @@
+### 1. لاگین و دریافت توکن‌ها
+POST http://127.0.0.1:8000/api/v1/auth/login/
+Content-Type: application/json
+
+{
+  "username": "paradox",
+  "password": "paradox7788"
+}
+
+### 2. خروج و بلک‌لیست کردن توکن
+POST http://127.0.0.1:8000/api/v1/users/logout/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgxMzU0MTY0LCJpYXQiOjE3ODEzNTA1NjQsImp0aSI6IjI4NmY4OGFhNDdlNTQ0Y2JiOTFkMGM3ODIxNGNjOTY2IiwidXNlcl9pZCI6IjEifQ.0-gOVRiFRuFLRQD7osoRNi-TZcoOlNrMILNowKgCR78
+
+{
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc4MTQzNjk2NCwiaWF0IjoxNzgxMzUwNTY0LCJqdGkiOiJhYjgyMmVlZWIwNTM0NTVkOTIxNzU0NjA5OTg0M2I3YiIsInVzZXJfaWQiOiIxIn0.Zgqv37JKvySM4mCFW8EjtyeAvVYlt-v07n4K-64C24c"
+}

@@ -77,3 +77,8 @@ New-Item -ItemType File -Name "DEV_LOG.md"
 - استفاده از `CreateAPIView` برای حفظ ساختار Clean Code.
 - تنظیم `AllowAny` برای باز بودن دسترسی فرم ثبت‌نام.
 - ساخت Endpoint ثبت‌نام در مسیر `api/v1/users/register/`.`
+
+## 🧩 شخصی‌سازی توکن‌ها (Custom JWT Claims)
+- ساخت `CustomTokenObtainPairSerializer` برای اضافه کردن اطلاعات اختصاصی کاربر به Payload توکن.
+- جلوگیری از درخواست‌های اضافی به سرور با تزریق فیلدهای `username`, `phone_number` و `is_customer` درون توکن.
+- جایگزینی View پیش‌فرض با `CustomTokenObtainPairView` در روتر اصلی.
