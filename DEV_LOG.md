@@ -82,3 +82,9 @@ New-Item -ItemType File -Name "DEV_LOG.md"
 - ساخت `CustomTokenObtainPairSerializer` برای اضافه کردن اطلاعات اختصاصی کاربر به Payload توکن.
 - جلوگیری از درخواست‌های اضافی به سرور با تزریق فیلدهای `username`, `phone_number` و `is_customer` درون توکن.
 - جایگزینی View پیش‌فرض با `CustomTokenObtainPairView` در روتر اصلی.
+
+## 💎 ارتقای معماری مدل کاربر (Production-Ready User Models)
+- تفکیک زیرساخت احراز هویت از اطلاعات شخصی با تعریف مدل `UserProfile` (رابطه OneToOne).
+- پیاده‌سازی سیستم چندآدرسه پیشرفته با مدل `UserAddress` (رابطه ForeignKey).
+- اضافه شدن فهرست نقش‌ها (`is_vendor`, `is_customer`) و فیلدهای راستی‌آزمایی (`is_phone_verified`).
+- راه‌اندازی مکانیزم Django Signals برای ساخت خودکار ردیف پروفایل بلافاصله پس از ثبت‌نام کاربر.

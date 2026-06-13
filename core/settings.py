@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-
     # Local apps
     'users.apps.UsersConfig',
 ]
@@ -85,6 +84,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
 # کانفیگ دیتابیس برای سوئیچ به PostgreSQL
 DATABASES = {
     'default': {
