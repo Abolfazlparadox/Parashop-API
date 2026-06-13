@@ -88,3 +88,8 @@ New-Item -ItemType File -Name "DEV_LOG.md"
 - پیاده‌سازی سیستم چندآدرسه پیشرفته با مدل `UserAddress` (رابطه ForeignKey).
 - اضافه شدن فهرست نقش‌ها (`is_vendor`, `is_customer`) و فیلدهای راستی‌آزمایی (`is_phone_verified`).
 - راه‌اندازی مکانیزم Django Signals برای ساخت خودکار ردیف پروفایل بلافاصله پس از ثبت‌نام کاربر.
+
+## 🎛️ تکمیل پنل کاربری (Dashboard APIs)
+- ساخت API پروفایل (`UserProfileView`) با قابلیت ادغام و آپدیت هم‌زمان جدول `User` و `UserProfile`.
+- پیاده‌سازی API تغییر رمز عبور امن (`ChangePasswordView`) با تایید رمز قبلی.
+- پیاده‌سازی کامل CRUD برای آدرس‌ها با استفاده از `ModelViewSet` و ایزوله کردن نمایش آدرس‌ها برای هر کاربر.

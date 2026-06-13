@@ -145,6 +145,15 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    # فعال‌سازی سیستم Throttling
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle', # برای کاربران مهمان (مبتنی بر IP)
+        'rest_framework.throttling.UserRateThrottle'  # برای کاربران لاگین‌کرده (مبتنی بر User ID)
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/minute',    # کاربران ناشناس نهایتا ۵ درخواست در دقیقه (عالی برای جلوگیری از اسپم ثبت‌نام/لاگین)
+        'user': '60/minute'    # کاربران لاگین‌کرده نهایتا ۶۰ درخواست در دقیقه
+    }
 }
 
 # تنظیمات مربوط به عمر توکن‌ها (میتونی زمان‌ها رو بعدا تغییر بدی)
@@ -154,4 +163,5 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
+    'TOKEN_OBTAIN_SERIALIZER': 'users.serializers.CustomTokenObtainPairSerializer',
 }
