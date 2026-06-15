@@ -99,3 +99,8 @@ New-Item -ItemType File -Name "DEV_LOG.md"
 - تنظیم پالت رنگی Dark Matte Steel با افکت‌های Neon Blue (`#00f0ff`).
 - پیاده‌سازی سیستم Inline Models برای ویرایش هم‌زمان پروفایل و آدرس در صفحه کاربر (`CustomUserAdmin`).
 - ساخت منوی میانبر سایدبار برای دسترسی سریع به Swagger، Frontend و GitHub.
+
+## 🛒 APIهای کاتالوگ محصولات و بهینه‌سازی دیتابیس
+- ساخت سریالایزرهای `CategorySerializer` و `ProductSerializer` با خروجی دوزبانه.
+- پیاده‌سازی `ReadOnlyModelViewSet` برای نمایش عمومی محصولات.
+- حل قطعی مشکل N+1 Problem در کوئری محصولات با استفاده از `select_related('category')` برای بهینه‌سازی سرعت پاسخگویی.

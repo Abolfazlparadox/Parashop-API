@@ -24,4 +24,7 @@ urlpatterns = [
     # 👤 Users App APIs
     # ------------------------------------------------
     path('api/v1/users/', include('users.urls')),
+
+    # 🛍️ Products Catalog
+    path('api/v1/products/', include('products.urls')),
 ]
