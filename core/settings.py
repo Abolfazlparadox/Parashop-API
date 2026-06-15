@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'drf_spectacular',
+    'django_filters',
     # Local apps
     'users.apps.UsersConfig',
     'products.apps.ProductsConfig'
@@ -162,6 +163,16 @@ REST_FRAMEWORK = {
     },
     # تنظیم سیستم تولید داکیومنت اتوماتیک
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    # تنظیمات صفحه‌بندی (Pagination)
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 12,  # در هر صفحه ۱۲ محصول (مناسب برای گریدبندی فرانت‌اند)
+
+    # تنظیمات موتور فیلتر و جستجو
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',  # برای فیلترهای دقیق
+        'rest_framework.filters.SearchFilter',  # برای سرچ متنی
+        'rest_framework.filters.OrderingFilter',  # برای مرتب‌سازی
+    ],
 }
 # تنظیمات اختصاصی دفترچه راهنمای API
 SPECTACULAR_SETTINGS = {

@@ -104,3 +104,9 @@ New-Item -ItemType File -Name "DEV_LOG.md"
 - ساخت سریالایزرهای `CategorySerializer` و `ProductSerializer` با خروجی دوزبانه.
 - پیاده‌سازی `ReadOnlyModelViewSet` برای نمایش عمومی محصولات.
 - حل قطعی مشکل N+1 Problem در کوئری محصولات با استفاده از `select_related('category')` برای بهینه‌سازی سرعت پاسخگویی.
+
+## 🔎 سیستم جستجو، فیلتر و صفحه‌بندی (Search & Pagination)
+- نصب `django-filter` و کانفیگ گلوبال `PageNumberPagination` (سایز ۱۲ آیتم در هر صفحه).
+- پیاده‌سازی `DjangoFilterBackend` برای فیلتر دقیق بر اساس دسته‌بندی محصولات.
+- راه‌اندازی `SearchFilter` برای جستجوی متنی در عنوان و توضیحات محصولات.
+- اضافه کردن `OrderingFilter` جهت مرتب‌سازی بر اساس قیمت و تاریخ ثبت.
