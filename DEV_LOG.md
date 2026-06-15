@@ -93,3 +93,9 @@ New-Item -ItemType File -Name "DEV_LOG.md"
 - ساخت API پروفایل (`UserProfileView`) با قابلیت ادغام و آپدیت هم‌زمان جدول `User` و `UserProfile`.
 - پیاده‌سازی API تغییر رمز عبور امن (`ChangePasswordView`) با تایید رمز قبلی.
 - پیاده‌سازی کامل CRUD برای آدرس‌ها با استفاده از `ModelViewSet` و ایزوله کردن نمایش آدرس‌ها برای هر کاربر.
+
+## 🎨 شخصی‌سازی پنل مدیریت (Django Unfold)
+- ادغام پکیج `django-unfold` برای ارتقای رابط کاربری ادمین جنگو به استانداردهای مدرن.
+- تنظیم پالت رنگی Dark Matte Steel با افکت‌های Neon Blue (`#00f0ff`).
+- پیاده‌سازی سیستم Inline Models برای ویرایش هم‌زمان پروفایل و آدرس در صفحه کاربر (`CustomUserAdmin`).
+- ساخت منوی میانبر سایدبار برای دسترسی سریع به Swagger، Frontend و GitHub.

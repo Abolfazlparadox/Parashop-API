@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from django.templatetags.static import static
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 # بارگذاری متغیرهای محیطی از فایل .env
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -32,6 +35,7 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 # Application definition
 
 INSTALLED_APPS = [
+    'unfold',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +45,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
+    'drf_spectacular',
     # Local apps
     'users.apps.UsersConfig',
 ]
@@ -153,9 +158,28 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '5/minute',    # کاربران ناشناس نهایتا ۵ درخواست در دقیقه (عالی برای جلوگیری از اسپم ثبت‌نام/لاگین)
         'user': '60/minute'    # کاربران لاگین‌کرده نهایتا ۶۰ درخواست در دقیقه
+    },
+    # تنظیم سیستم تولید داکیومنت اتوماتیک
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+# تنظیمات اختصاصی دفترچه راهنمای API
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Parashop API',
+    'DESCRIPTION': 'دفترچه راهنمای جامع APIهای پروژه فروشگاهی Parashop',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # کامپوننت‌های امنیتی رو به سادگی به Swagger اضافه می‌کنه تا بتونی تو همون محیط تستی لاگین کنی
+    'SECURITY': [{'BearerAuth': []}],
+    'COMPONENTS': {
+        'securitySchemes': {
+            'BearerAuth': {
+                'type': 'http',
+                'scheme': 'bearer',
+                'bearerFormat': 'JWT',
+            }
+        }
     }
 }
-
 # تنظیمات مربوط به عمر توکن‌ها (میتونی زمان‌ها رو بعدا تغییر بدی)
 from datetime import timedelta
 
@@ -164,4 +188,72 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
     'TOKEN_OBTAIN_SERIALIZER': 'users.serializers.CustomTokenObtainPairSerializer',
+}
+# =======================================================
+# 🎨 Unfold Admin Panel Customization (Parashop)
+# =======================================================
+UNFOLD = {
+    "SITE_TITLE": "Parashop",
+    "SITE_HEADER": "Parashop",
+    "SITE_URL": "/",
+
+    # تنظیمات آیکون و لوگو (فعلا روی متریال دیزاین تنظیم شده، بعدا می‌توانی عکس‌های خودت را در پوشه static/ قرار دهی)
+    "SITE_SYMBOL": "speed",  # آیکون متریال دیزاین کنار اسم سایت
+    "SITE_ICON": {
+        "light": lambda request: static("logo-light.svg"),
+        "dark": lambda request: static("logo-dark.svg"),
+    },
+
+    # نمایش دکمه "مشاهده سایت" و تاریخچه تغییرات
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+
+    # 🔵 پالت رنگی اختصاصی: آبی نئونی (Neon Blue) برای المان‌ها
+    "COLORS": {
+        "primary": {
+            "50": "#eff6ff",
+            "100": "#dbeafe",
+            "200": "#bfdbfe",
+            "300": "#93c5fd",
+            "400": "#60a5fa",
+            "500": "#00f0ff",  # Neon Blue (رنگ اصلی)
+            "600": "#00d1ff",
+            "700": "#1d4ed8",
+            "800": "#1e40af",
+            "900": "#1e3a8a",
+            "950": "#172554",
+        },
+    },
+
+    # 🔗 لینک‌های دسترسی سریع در سایدبار
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": _("میانبرهای توسعه"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("مستندات API (Swagger)"),
+                        "icon": "menu_book",
+                        "link": "/api/docs/swagger/",
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                    {
+                        "title": _("فرانت‌اند فروشگاه (Next.js)"),
+                        "icon": "storefront",
+                        "link": "http://localhost:3000",  # پورت استاندارد ریکت/نکست
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                    {
+                        "title": _("سورس‌کد (GitHub)"),
+                        "icon": "code",
+                        "link": "https://github.com/your-username/Parashop-API",  # آدرس ریپازیتوری خودت را اینجا بگذار
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                ],
+            },
+        ],
+    },
 }
