@@ -27,4 +27,7 @@ urlpatterns = [
 
     # 🛍️ Products Catalog
     path('api/v1/products/', include('products.urls')),
+
+    # 🛒 Cart APIs
+    path('api/v1/cart/', include('cart.urls')),
 ]

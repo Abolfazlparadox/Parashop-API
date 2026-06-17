@@ -110,3 +110,12 @@ New-Item -ItemType File -Name "DEV_LOG.md"
 - پیاده‌سازی `DjangoFilterBackend` برای فیلتر دقیق بر اساس دسته‌بندی محصولات.
 - راه‌اندازی `SearchFilter` برای جستجوی متنی در عنوان و توضیحات محصولات.
 - اضافه کردن `OrderingFilter` جهت مرتب‌سازی بر اساس قیمت و تاریخ ثبت.
+
+## 🛒 Phase 3: Redis-Backed Shopping Cart
+- نصب `django-redis` و کانفیگ `CACHES` برای استفاده از Redis به عنوان بک‌اند.
+- ساخت اپ `cart` و اضافه کردن آن به `INSTALLED_APPS`.
+- پیاده‌سازی `Cart` class در `cart/cart.py` برای مدیریت منطق سبد خرید.
+- ساخت `AddCartItemSerializer` و `CartSerializer` برای اعتبارسنجی و نمایش داده‌های سبد خرید.
+- پیاده‌سازی `CartView` و `CartClearView` برای مدیریت APIهای سبد خرید.
+- ساخت `cart/urls.py` و اضافه کردن آن به `core/urls.py`.
+- نوشتن تست‌های جامع برای APIهای سبد خرید در `cart/tests.py`.
