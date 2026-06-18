@@ -30,4 +30,7 @@ urlpatterns = [
 
     # 🛒 Cart APIs
     path('api/v1/cart/', include('cart.urls')),
+
+    # 📦 Orders APIs
+    path('api/v1/orders/', include('orders.urls')),
 ]

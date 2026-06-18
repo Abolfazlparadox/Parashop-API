@@ -119,3 +119,17 @@ New-Item -ItemType File -Name "DEV_LOG.md"
 - پیاده‌سازی `CartView` و `CartClearView` برای مدیریت APIهای سبد خرید.
 - ساخت `cart/urls.py` و اضافه کردن آن به `core/urls.py`.
 - نوشتن تست‌های جامع برای APIهای سبد خرید در `cart/tests.py`.
+
+## 📦 Phase 4: Order Management System
+- ساخت اپ `orders` و اضافه کردن آن به `INSTALLED_APPS`.
+- پیاده‌سازی مدل‌های `Order` و `OrderItem` با رعایت قواعد ارزی (تومان) و روابط پایگاه داده.
+- یکپارچه‌سازی با پنل مدیریت `django-unfold` با استفاده از `TabularInline` برای نمایش آیتم‌های سفارش.
+- ساخت `OrderViewSet` برای تبدیل سبد خرید به سفارش دائمی و نمایش تاریخچه سفارشات کاربر.
+- پیاده‌سازی منطق `create` که سبد خرید را به آیتم‌های سفارش تبدیل کرده و سپس سبد را پاک می‌کند.
+- اضافه کردن روت‌های مربوط به سفارشات در مسیر `api/v1/orders/`.
+
+## 🚀 Phase 5: Async Processing with Celery
+- نصب `celery` و `redis` و کانفیگ اولیه در `core/celery.py` و `core/__init__.py`.
+- تعریف `CELERY_BROKER_URL` برای اتصال به Redis.
+- ساخت تسک نمونه `send_order_confirmation_email` در `orders/tasks.py` برای پردازش غیرهمزمان.
+- ایجاد `docker-compose.yml` و `Dockerfile` برای ارکستراسیون سرویس‌های `web`, `redis`, و `worker`.
