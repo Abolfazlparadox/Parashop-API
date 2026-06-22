@@ -1,15 +1,17 @@
+from decimal import Decimal
+
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from django.db import transaction
-from .models import Order, OrderItem, UserAddress, Payment
+from .models import Order, OrderItem, UserAddress, Payment, Coupon  # 👈 Coupon اضافه شد
 from .serializers import OrderSerializer, CreateOrderSerializer
 from cart.cart import Cart
 from .tasks import send_order_confirmation_email
 from .services.zarinpal import ZarinPalService
-
+from django.utils import timezone
 
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
@@ -97,6 +99,59 @@ class OrderViewSet(viewsets.ModelViewSet):
             payment.save()
             return Response({"error": result['error']}, status=status.HTTP_400_BAD_REQUEST)
 
+    # -----------------------------------------------------------------
+    # 🎁 API اعمال کد تخفیف (مسیر خودکار: POST /api/v1/orders/{id}/apply_coupon/)
+    # -----------------------------------------------------------------
+    @action(detail=True, methods=['post'], url_path='apply_coupon')
+    def apply_coupon(self, request, pk=None):
+        order = self.get_object()
+
+        # لایه امنیتی ۱: فقط سفارشات پرداخت‌نشده قابلیت تخفیف دارند
+        if order.status != 'pending':
+            return Response(
+                {"error": "فقط روی سفارشات در انتظار پرداخت می‌توان کد تخفیف اعمال کرد."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # لایه امنیتی ۲: جلوگیری از اعمال چندباره تخفیف روی یک سفارش
+        if order.coupon:
+            return Response(
+                {"error": "یک کد تخفیف قبلاً روی این سفارش اعمال شده است."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        code = request.data.get('code')
+        if not code:
+            return Response({"error": "لطفاً کد تخفیف را ارسال کنید."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # جستجوی کوپن
+        try:
+            coupon = Coupon.objects.get(code__iexact=code)  # iexact یعنی به بزرگی و کوچکی حروف حساس نباشد
+        except Coupon.DoesNotExist:
+            return Response({"error": "کد تخفیف نامعتبر است."}, status=status.HTTP_404_NOT_FOUND)
+
+        # بررسی اعتبار (تاریخ و وضعیت)
+        if not coupon.is_valid():
+            return Response({"error": "این کد تخفیف منقضی یا غیرفعال شده است."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # محاسبه و اعمال تخفیف
+        with transaction.atomic():
+            # قفل کردن رکورد سفارش برای جلوگیری از باگ‌های همزمانی
+            order = Order.objects.select_for_update().get(id=order.id)
+
+            # محاسبه مبلغ تخفیف (مثلاً 20 درصدِ 100 هزار تومان میشه 20 هزار تومان)
+            discount_amount = (order.total_paid * coupon.discount) / Decimal('100')
+
+            order.coupon = coupon
+            order.discount_amount = discount_amount
+            order.total_paid -= discount_amount  # کسر تخفیف از مبلغ نهایی قابل پرداخت
+            order.save()
+
+        return Response({
+            "message": "کد تخفیف با موفقیت اعمال شد.",
+            "discount_applied": discount_amount,
+            "new_total": order.total_paid
+        }, status=status.HTTP_200_OK)
     # -----------------------------------------------------------------
     # 🔄 API تایید پرداخت (مسیر خودکار: POST /api/v1/orders/payment/verify/)
     # -----------------------------------------------------------------

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin, TabularInline
-from .models import Order, OrderItem
+from .models import Order, OrderItem, Coupon
 from django.utils.html import format_html
 
 
@@ -63,3 +63,14 @@ class OrderAdmin(ModelAdmin):
 @admin.register(OrderItem)
 class OrderItemAdmin(ModelAdmin):
     list_display = ['id', 'order', 'product', 'quantity', 'price']
+
+
+# این کلاس رو در هر کجای فایل (مثلاً پایین کلاس OrderAdmin) اضافه کن
+@admin.register(Coupon)
+class CouponAdmin(ModelAdmin):
+    list_display = ['code', 'valid_from', 'valid_to', 'discount', 'active']
+    list_filter = ['active', 'valid_from', 'valid_to']
+    search_fields = ['code']
+
+    # برای اینکه تو پنل ادمین، تاریخ‌ها رو راحت‌تر انتخاب کنیم
+    ordering = ['-valid_to']
