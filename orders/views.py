@@ -4,7 +4,6 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from django.db import transaction
-
 from .models import Order, OrderItem, UserAddress, Payment
 from .serializers import OrderSerializer, CreateOrderSerializer
 from cart.cart import Cart
@@ -51,7 +50,6 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.save()
 
         # Trigger the asynchronous task
-        send_order_confirmation_email.delay(order.id)
 
         cart.clear()
 
@@ -136,7 +134,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
                 order.status = 'processing'
                 order.save()
-
+            send_order_confirmation_email.delay(order.id)
             return Response({
                 "message": result['message'],
                 "ref_id": result['ref_id'],
