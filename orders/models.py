@@ -69,3 +69,40 @@ class OrderItem(models.Model):
 
     def get_cost(self):
         return self.price * self.quantity
+
+
+class Payment(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'در انتظار پرداخت'),
+        ('success', 'موفق'),
+        ('failed', 'ناموفق'),
+    )
+
+    # رابطه یک-به-چند: هر سفارش می‌تونه چند تلاش برای پرداخت داشته باشه
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
+
+    # مبلغی که دقیقاً به درگاه ارسال شده (برای جلوگیری از مغایرت‌های مالی)
+    amount = models.DecimalField(max_digits=12, decimal_places=0)
+
+    # شناسه یکتای زرین‌پال برای ارجاع کاربر به درگاه (Authority)
+    authority = models.CharField(max_length=255, unique=True, null=True, blank=True)
+
+    # کد پیگیری بانکی که بعد از پرداخت موفق از سمت درگاه به ما داده می‌شه
+    ref_id = models.CharField(max_length=255, null=True, blank=True)
+
+    # وضعیت تراکنش
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='pending')
+
+    # آی‌پی کاربری که پرداخت رو انجام داده (برای امنیت و پیگیری‌های قانونی)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'پرداخت'
+        verbose_name_plural = 'پرداخت‌ها'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Payment {self.id} for Order {self.order.id} - {self.get_status_display()}"
